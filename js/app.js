@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  fetch('../data/data.json')
+  fetch('./data/data.json')
     .then(response => response.json())
     .then(items => {
       const $wrapper = document.querySelector(".items-wrapper");
