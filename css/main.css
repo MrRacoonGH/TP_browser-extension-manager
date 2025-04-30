@@ -171,6 +171,10 @@ main {
         align-items: center;
     }
 
+    .extensions {
+        /* a faire le responsive des carte  */
+    }
+
     .card {
         width: 382px;
     }
