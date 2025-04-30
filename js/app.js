@@ -1,7 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
   const selectItems = document.querySelectorAll(".select li");
 
-  // Gestion du filtre (All, Active, Inactive)
   selectItems.forEach(item => {
     item.addEventListener("click", function () {
       selectItems.forEach(el => el.classList.remove("selected"));
@@ -27,7 +26,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  // Chargement des données et création dynamique des cartes
   fetch('../data/data.json')
     .then(response => response.json())
     .then(items => {
@@ -67,13 +65,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const $toggleBtn = document.createElement("input");
         $toggleBtn.type = "checkbox";
-        $toggleBtn.checked = false; // Tous inactifs par défaut
+        $toggleBtn.checked = false;
 
         const $slider = document.createElement("span");
         $slider.classList.add("slider");
 
         $toggleBtn.addEventListener("change", () => {
-          // Pas de texte à mettre à jour ici
         });
 
         $switchLabel.appendChild($toggleBtn);
@@ -95,4 +92,3 @@ document.addEventListener("DOMContentLoaded", function () {
     })
     .catch(error => console.error("Erreur lors du chargement du JSON :", error));
 });
-  
