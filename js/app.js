@@ -1,124 +1,98 @@
-document.querySelectorAll('.select li').forEach(item => {
-    item.addEventListener('click', () => {
-      document.querySelectorAll('.select li').forEach(li => li.classList.remove('selected'));
-      item.classList.add('selected');
-    });
-  });
-  
+document.addEventListener("DOMContentLoaded", function () {
+  const selectItems = document.querySelectorAll(".select li");
 
+  // Gestion du filtre (All, Active, Inactive)
+  selectItems.forEach(item => {
+    item.addEventListener("click", function () {
+      selectItems.forEach(el => el.classList.remove("selected"));
+      this.classList.add("selected");
 
-  const toggle = document.getElementById('toggleBtn');
+      const selectedValue = this.textContent.trim();
 
-  toggle.addEventListener('change', () => {
-    if (toggle.checked) {
-      console.log("Bouton activé");
-    } else {
-      console.log("Bouton désactivé");
-    }
-    console.log(toogle)
-  });
-  
+      const cards = document.querySelectorAll(".card");
+      cards.forEach(card => {
+        const toggleBtn = card.querySelector("input[type='checkbox']");
+        const isActive = toggleBtn.checked;
 
-  document.addEventListener("DOMContentLoaded", function () {
-    const selectItems = document.querySelectorAll(".select li");
-    const cards = document.querySelectorAll(".card");
-  
-    selectItems.forEach(item => {
-      item.addEventListener("click", function () {
-        selectItems.forEach(el => el.classList.remove("selected"));
-        
-        this.classList.add("selected");
-  
-        const selectedValue = this.textContent.trim();
-        
-        cards.forEach(card => {
-          const toggleBtn = card.querySelector("#toggleBtn");
-          if (selectedValue === "All") {
-            card.style.display = "block";
-          } else if (selectedValue === "Active" && toggleBtn.checked) {
-            card.style.display = "block";
-          } else if (selectedValue === "Inactive" && !toggleBtn.checked) {
-            card.style.display = "block";
-          } else {
-            card.style.display = "none";
-          }
-        });
+        if (
+          selectedValue === "All" ||
+          (selectedValue === "Active" && isActive) ||
+          (selectedValue === "Inactive" && !isActive)
+        ) {
+          card.style.display = "block";
+        } else {
+          card.style.display = "none";
+        }
       });
     });
   });
-  
 
-
-
-  //non fonctionelle :
-
-
-
-  function removeCard(element) {
-    let card = element.closest(".card");
-    if (card) {
-        card.remove();
-    }
-}
-
-
+  // Chargement des données et création dynamique des cartes
   fetch('../data/data.json')
     .then(response => response.json())
     .then(items => {
-        const $wrapper = document.querySelector(".items-wrapper");
+      const $wrapper = document.querySelector(".items-wrapper");
 
-        items.forEach(function(item) {
-            const $card = document.createElement("div");
-            $card.classList.add("card");
+      items.forEach(function (item) {
+        const $card = document.createElement("div");
+        $card.classList.add("card");
 
-            const $info = document.createElement("div");
-            $info.classList.add("info");
+        const $info = document.createElement("div");
+        $info.classList.add("info");
 
-            const $image = document.createElement("img");
-            $image.src = item.logo;
-            $image.alt = item.name;
+        const $image = document.createElement("img");
+        $image.src = item.logo;
+        $image.alt = item.name;
 
-            const $details = document.createElement("div");
-            $details.classList.add("details");
+        const $details = document.createElement("div");
+        $details.classList.add("details");
 
-            const $name = document.createElement("h2");
-            $name.textContent = item.name;
+        const $name = document.createElement("h2");
+        $name.textContent = item.name;
 
-            const $description = document.createElement("p");
-            $description.textContent = item.description;
+        const $description = document.createElement("p");
+        $description.textContent = item.description;
 
-            const $action = document.createElement("div");
-            $action.classList.add("extensions-action");
+        const $action = document.createElement("div");
+        $action.classList.add("extensions-action");
 
-            const $removeItem = document.createElement("li");
-            $removeItem.textContent = "remove";
-
-            const $switchLabel = document.createElement("label");
-            $switchLabel.classList.add("switch");
-
-            const $toggleBtn = document.createElement("input");
-            $toggleBtn.type = "checkbox";
-            $toggleBtn.id = "toggleBtn";
-            $toggleBtn.checked = item.isActive;
-
-            const $slider = document.createElement("span");
-            $slider.classList.add("slider");
-
-            $switchLabel.appendChild($toggleBtn);
-            $switchLabel.appendChild($slider);
-
-            $info.appendChild($image);
-            $info.appendChild($details);
-            $details.appendChild($name);
-            $details.appendChild($description);
-
-            $action.appendChild($removeItem);
-            $action.appendChild($switchLabel);
-
-            $card.appendChild($info);
-            $card.appendChild($action);
-
-            $wrapper.appendChild($card);
+        const $removeItem = document.createElement("li");
+        $removeItem.textContent = "remove";
+        $removeItem.addEventListener("click", () => {
+          $card.remove();
         });
+
+        const $switchLabel = document.createElement("label");
+        $switchLabel.classList.add("switch");
+
+        const $toggleBtn = document.createElement("input");
+        $toggleBtn.type = "checkbox";
+        $toggleBtn.checked = false; // Tous inactifs par défaut
+
+        const $slider = document.createElement("span");
+        $slider.classList.add("slider");
+
+        $toggleBtn.addEventListener("change", () => {
+          // Pas de texte à mettre à jour ici
+        });
+
+        $switchLabel.appendChild($toggleBtn);
+        $switchLabel.appendChild($slider);
+
+        $info.appendChild($image);
+        $info.appendChild($details);
+        $details.appendChild($name);
+        $details.appendChild($description);
+
+        $action.appendChild($removeItem);
+        $action.appendChild($switchLabel);
+
+        $card.appendChild($info);
+        $card.appendChild($action);
+
+        $wrapper.appendChild($card);
+      });
     })
     .catch(error => console.error("Erreur lors du chargement du JSON :", error));
+});
+  
